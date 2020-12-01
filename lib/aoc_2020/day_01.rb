@@ -17,8 +17,15 @@ module Aoc2020
 
     private
 
-    def expense_report(items)
-      @input.sort.combination(items).to_a.each { |a| return a.inject(:*) if a.inject(:+).eql?(2020) }
+    def expense_report(item_count)
+      values      ||= @input.sort
+      sample_size ||= item_count
+      values.first(sample_size).combination(item_count).to_a.each { |a| return a.inject(:*) if a.inject(:+).eql?(2020) }
+      raise 'did not find an answer'
+    rescue StandardError => e
+      sample_size += 1
+      retry if sample_size <= values.size
+      raise e
     end
   end
 end
