@@ -4,13 +4,3 @@
 require 'aoc_2020'
 
 Aoc2020::CLI.start(ARGV)
-
-#
-# day_number  = ARGV.shift.to_s.capitalize
-# part_number = ARGV.shift
-# puts "Calling Aoc2020::#{day_number}.new.#{part_number}"
-# "Aoc2020::#{day_number}.new.#{part_number}"
-
-# target_class = Object.const_get('Aoc2020::' + ARGV.shift.to_s.capitalize).new
-# puts "target_class = #{target_class}"
-# Object.const_get(target_class + ".#{ARGV.shift}")

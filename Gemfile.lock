@@ -9,6 +9,7 @@ GEM
   specs:
     ast (2.4.1)
     diff-lcs (1.4.4)
+    gem-release (2.2.0)
     parallel (1.20.1)
     parser (2.7.2.0)
       ast (~> 2.4.1)
@@ -50,6 +51,7 @@ PLATFORMS
 DEPENDENCIES
   aoc_2020!
   bundler (= 2.1.4)
+  gem-release
   rake (~> 12.0)
   rspec (~> 3.0)
   rubocop (= 1.4.2)

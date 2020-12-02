@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor"
 
   spec.add_development_dependency 'bundler', '2.1.4'
+  spec.add_development_dependency 'gem-release'
   spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '1.4.2'
