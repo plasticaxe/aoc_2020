@@ -3,13 +3,12 @@
 require 'thor'
 
 module Aoc2020
-  #----
+  # I don't really know what this is for yet. I'm just trying stuff out.
   class CLI < Thor
     desc 'day_01', 'prints the solutions'
-    def day_01
-      day_01_class = Aoc2020::Day01.new
-      puts day_01_class.part_one
-      puts day_01_class.part_two
+    def day_one
+      puts Aoc2020::Day01.new.part_one
+      puts Aoc2020::Day01.new.part_two
     end
   end
 end
