@@ -2,24 +2,14 @@
 
 Solutions created for https://adventofcode.com/2020 in the guise of a gem for no particular reason.
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'aoc_2020'
-```
-
-And then execute:
-
-    $ bundle install
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install all runtime and development dependencies. Then, run `rake spec` to run the rspec and rubocop tests. 
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`.
+## Installation
+
+To install this gem onto your local machine, run `bundle exec rake install` after you have set up for development.
 
 ## Usage
 
