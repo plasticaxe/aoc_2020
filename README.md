@@ -22,7 +22,7 @@ Or install it yourself as:
 
     $ aoc_2020 --day <day> [--input-file <path to input file>]
     
-Without specifying an input file it will generate solutions based on my personal input data from Advent of Code 2020
+Without specifying an input file it will generate solutions based on my personal input data from Advent of Code 2020. This may be useful for testing any changes.
 
 ## Development
 
