@@ -4,7 +4,8 @@ module Aoc2020
   #----
   class TreeFinder
     def initialize(input_file)
-      @map_of_slopes = File.read(input_file).each_line(chomp: true).map { |i| i.chars * 100 }
+      @map_of_slopes = File.read(input_file).each_line(chomp: true).map(&:chars)
+      @slope_width   = @map_of_slopes[0].size
       @current_x     = 0
       @current_y     = 0
     end
@@ -15,7 +16,6 @@ module Aoc2020
         move_position(change_x, change_y)
         return trees_found if reached_bottom?
 
-        add_more_slopes
         trees_found += 1 if tree_here?
       end
     end
@@ -23,7 +23,7 @@ module Aoc2020
     private
 
     def move_position(change_x, change_y)
-      @current_x += change_x
+      @current_x = (@current_x + change_x) % @slope_width
       @current_y += change_y
     end
 
@@ -33,12 +33,6 @@ module Aoc2020
 
     def reached_bottom?
       @map_of_slopes[@current_y].nil?
-    end
-
-    def add_more_slopes
-      return unless @map_of_slopes[@current_y][@current_x].nil?
-
-      @map_of_slopes[@current_y] = [@map_of_slopes[@current_y], @map_of_slopes[@current_y]].flatten
     end
   end
 
