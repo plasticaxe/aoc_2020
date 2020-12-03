@@ -20,11 +20,14 @@ Or install it yourself as:
 
 ## Usage
 
-This gem has no obvious usage besides my own testing at this point.
+    $ aoc_2020 --day <day> [--input-file <path to input file>]
+    
+Without specifying an input file it will generate solutions based on my personal input data from Advent of Code 2020
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install all runtime and development dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install all runtime and development dependencies. Then, run `rake spec` to run the rspec and rubocop tests. 
+You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`.
 
