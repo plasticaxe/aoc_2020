@@ -2,16 +2,23 @@
 
 module Aoc2020
   #----
-  class DayXX
-    def initialize
-      @input = File.read(File.join(Aoc2020::INPUT_FILES, 'day_XX.txt'))
+  class Work
+    def initialize(input_file)
+      @input = File.read(input_file)
+    end
+  end
+
+  #----
+  module DayXX
+    def self.default_input_file
+      File.join(Aoc2020::INPUT_FILES, 'day_XX.txt')
     end
 
-    def part_one
+    def self.part_one(input_file = default_input_file)
       # ----
     end
 
-    def part_two
+    def self.part_two(input_file = default_input_file)
       # ----
     end
   end
