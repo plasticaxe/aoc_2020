@@ -7,6 +7,7 @@ require 'aoc_2020/day_02'
 require 'aoc_2020/day_03'
 require 'aoc_2020/day_04'
 require 'aoc_2020/day_05'
+require 'aoc_2020/day_06'
 
 module Aoc2020
   INPUT_FILES = File.join(__dir__, '..', 'resources', 'input')
