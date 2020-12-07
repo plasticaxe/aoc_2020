@@ -2,7 +2,7 @@
 
 module Aoc2020
   #----
-  class ElfAccounting
+  class ReportRepair
     def initialize(input_file)
       @input = File.read(input_file).split.map(&:to_i)
     end
@@ -26,11 +26,11 @@ module Aoc2020
     end
 
     def self.part_one(input_file = default_input_file)
-      ElfAccounting.new(input_file).expense_report(2, 2020)
+      ReportRepair.new(input_file).expense_report(2, 2020)
     end
 
     def self.part_two(input_file = default_input_file)
-      ElfAccounting.new(input_file).expense_report(3, 2020)
+      ReportRepair.new(input_file).expense_report(3, 2020)
     end
   end
 end

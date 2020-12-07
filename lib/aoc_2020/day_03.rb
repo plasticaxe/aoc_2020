@@ -2,7 +2,7 @@
 
 module Aoc2020
   #----
-  class TreeFinder
+  class TobogganTrajectory
     def initialize(input_file)
       @map_of_slopes = File.read(input_file).each_line(chomp: true).map(&:chars)
       @slope_width   = @map_of_slopes[0].size
@@ -43,12 +43,12 @@ module Aoc2020
     end
 
     def self.part_one(input_file = default_input_file)
-      TreeFinder.new(input_file).trees_found(3, 1)
+      TobogganTrajectory.new(input_file).trees_found(3, 1)
     end
 
     def self.part_two(input_file = default_input_file)
       [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]].map do |c|
-        TreeFinder.new(input_file).trees_found(c[0], c[1])
+        TobogganTrajectory.new(input_file).trees_found(c[0], c[1])
       end.inject(:*)
     end
   end

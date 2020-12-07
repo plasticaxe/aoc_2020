@@ -2,7 +2,7 @@
 
 module Aoc2020
   #----
-  class TobogganPassword
+  class PasswordPhilosophy
     def initialize(input_file)
       @input = File.read(input_file)
     end
@@ -36,11 +36,11 @@ module Aoc2020
     end
 
     def self.part_one(input_file = default_input_file)
-      TobogganPassword.new(input_file).validator_one
+      PasswordPhilosophy.new(input_file).validator_one
     end
 
     def self.part_two(input_file = default_input_file)
-      TobogganPassword.new(input_file).validator_two
+      PasswordPhilosophy.new(input_file).validator_two
     end
   end
 end
