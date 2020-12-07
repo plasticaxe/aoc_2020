@@ -4,5 +4,5 @@
 require 'bundler/setup'
 require 'aoc_2020'
 
-puts Aoc2020::DayXX.new.part_one
-puts Aoc2020::DayXX.new.part_two
+puts Aoc2020::Day07.part_one
+puts Aoc2020::Day07.part_two
