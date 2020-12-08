@@ -12,11 +12,24 @@ module Aoc2020
     end
 
     def value_before_loop
-      loop do
-        run_next_instruction
-        return @accumulator if looping?
+      loop { looping? ? break : run_next_instruction }
+      @accumulator
+    end
+
+    def find_the_flaw
+      %w[nop jmp].permutation.each do |perm|
+        operation_indexes(perm[0]).each do |index|
+          switch_operations(index, perm[0], perm[1]) do
+            loop do
+              return @accumulator if terminated?
+              looping? ? break : run_next_instruction
+            end
+          end
+        end
       end
     end
+
+    private
 
     def looping?
       @instructions[@pointer][:counter].positive?
@@ -31,19 +44,6 @@ module Aoc2020
       yield
       reset_system
       @instructions[index][:operation] = original_op
-    end
-
-    def find_the_flaw
-      %w[nop jmp].permutation.each do |perm|
-        operation_indexes(perm[0]).each do |index|
-          switch_operations(index, perm[0], perm[1]) do
-            loop do
-              return @accumulator if terminated?
-              looping? ? break : run_next_instruction
-            end
-          end
-        end
-      end
     end
 
     def run_next_instruction
