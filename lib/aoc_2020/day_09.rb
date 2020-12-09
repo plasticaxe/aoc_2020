@@ -26,9 +26,9 @@ module Aoc2020
         return (@input[start_index..pointer].min + @input[start_index..pointer].max) if total.eql?(target)
       end
     rescue StandardError
-      raise 'out of bounds' if @input[start_index] >= target
-
       start_index += 1
+      raise 'out of bounds' if start_index.eql?(@input.size)
+
       retry
     end
   end
