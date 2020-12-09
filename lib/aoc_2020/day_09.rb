@@ -17,17 +17,19 @@ module Aoc2020
       @input[(pointer - 25)..(pointer - 1)].combination(2).map(&:sum).include?(@input[pointer])
     end
 
+    class ValueTooLargeError < StandardError; end
+
     def encryption_weakness(target: first_illegal_entry)
       total = 0
       (start_index ||= 0).upto(@input.size - 1) do |pointer|
         total += @input[pointer]
-        raise if total > target
+        raise ValueTooLargeError if total > target
 
         return (@input[start_index..pointer].min + @input[start_index..pointer].max) if total.eql?(target)
       end
-    rescue StandardError
+    rescue ValueTooLargeError
       start_index += 1
-      raise 'out of bounds' if start_index.eql?(@input.size)
+      raise StandardError, 'index out of bounds' if start_index.eql?(@input.size)
 
       retry
     end
