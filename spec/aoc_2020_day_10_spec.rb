@@ -20,11 +20,10 @@ RSpec.describe Aoc2020 do
       end
     end
 
-    # Solution doesn't scale -- need to revisit.
-    # context 'part_two' do
-    #   it 'should have the right answer' do
-    #     expect(Aoc2020::Day10.part_two).to be(-1)
-    #   end
-    # end
+    context 'part_two' do
+      it 'should have the right answer' do
+        expect(Aoc2020::Day10.part_two).to be(6_044_831_973_376)
+      end
+    end
   end
 end

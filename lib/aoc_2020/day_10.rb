@@ -21,7 +21,8 @@ module Aoc2020
     end
 
     def combinations(current = 0)
-      current.eql?(end_state) ? 1 : next_possible_values(current).map { |n| combinations(n) }.inject(:+)
+      return 1 if current.eql?(end_state)
+      (@combinations ||= {})[current] ||= next_possible_values(current).map { |n| combinations(n) }.inject(:+)
     end
 
     def next_possible_values(current = 0)
