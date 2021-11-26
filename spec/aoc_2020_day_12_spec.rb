@@ -22,7 +22,7 @@ RSpec.describe Aoc2020 do
 
     context 'part_two' do
       it 'should have the right answer' do
-        expect(Aoc2020::Day12.part_two).to be(18107)
+        expect(Aoc2020::Day12.part_two).to be(18_107)
       end
     end
   end

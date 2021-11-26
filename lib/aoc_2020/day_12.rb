@@ -32,24 +32,24 @@ module Aoc2020
       when 'R'
         @direction = case @direction
                      when 'N'
-                       ['N', 'E', 'S', 'W'][instruction[:value] / 90]
+                       %w[N E S W][instruction[:value] / 90]
                      when 'E'
-                       ['E', 'S', 'W', 'N'][instruction[:value] / 90]
+                       %w[E S W N][instruction[:value] / 90]
                      when 'S'
-                       ['S', 'W', 'N', 'E'][instruction[:value] / 90]
+                       %w[S W N E][instruction[:value] / 90]
                      when 'W'
-                       ['W', 'N', 'E', 'S'][instruction[:value] / 90]
+                       %w[W N E S][instruction[:value] / 90]
                      end
       when 'L'
         @direction = case @direction
                      when 'N'
-                       ['N', 'W', 'S', 'E'][instruction[:value] / 90]
+                       %w[N W S E][instruction[:value] / 90]
                      when 'E'
-                       ['E', 'N', 'W', 'S'][instruction[:value] / 90]
+                       %w[E N W S][instruction[:value] / 90]
                      when 'S'
-                       ['S', 'E', 'N', 'W'][instruction[:value] / 90]
+                       %w[S E N W][instruction[:value] / 90]
                      when 'W'
-                       ['W', 'S', 'E', 'N'][instruction[:value] / 90]
+                       %w[W S E N][instruction[:value] / 90]
                      end
       end
     end

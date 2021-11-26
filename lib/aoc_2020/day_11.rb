@@ -4,7 +4,7 @@ module Aoc2020
   #----
   class SeatingSystem
     def initialize(input_file)
-      @seats = File.read(input_file).each_line(chomp: true).map { |line| line.chars }
+      @seats = File.read(input_file).each_line(chomp: true).map(&:chars)
     end
 
     def stabilised_occupied_seats(including_visible = false)
@@ -16,19 +16,20 @@ module Aoc2020
             when 'L'
               if including_visible
                 modified_seats[row][col] = '#' if visible_seats_empty?(row, col)
-              else
-                modified_seats[row][col] = '#' if adjacent_seats_empty?(row, col)
+              elsif adjacent_seats_empty?(row, col)
+                modified_seats[row][col] = '#'
               end
             when '#'
               if including_visible
                 modified_seats[row][col] = 'L' if visible_seats_occupied?(row, col)
-              else
-                modified_seats[row][col] = 'L' if adjacent_seats_occupied?(row, col)
+              elsif adjacent_seats_occupied?(row, col)
+                modified_seats[row][col] = 'L'
               end
             end
           end
         end
         return count_occupied_seats if modified_seats.eql?(@seats)
+
         @seats = modified_seats.map(&:clone)
       end
     end
@@ -46,6 +47,7 @@ module Aoc2020
       (row - 1).upto(row + 1).select { |n| n >= 0 }.each do |r|
         (col - 1).upto(col + 1).select { |n| n >= 0 }.each do |c|
           next if [row, col].eql?([r, c]) || @seats[r].nil? || @seats[r][c].nil?
+
           array << @seats[r][c]
         end
       end
@@ -61,64 +63,80 @@ module Aoc2020
     end
 
     def visible_seats_status(row, col)
-      array = []
-      # N
-      array << (row - 1).downto(0).map { |r| @seats[r][col] }.reject { |x| x.eql?('.') }.first
-      # E
-      array << (col + 1).upto(@seats[row].length - 1).map { |c| @seats[row][c] }.reject { |x| x.eql?('.') }.first
-      # S
-      array << (row + 1).upto(@seats.size - 1).map { |r| @seats[r][col] }.reject { |x| x.eql?('.') }.first
-      # W
-      array << (col - 1).downto(0).map { |c| @seats[row][c] }.reject { |x| x.eql?('.') }.first
-      # NE
-      r = row
-      c = col
-      loop do
-        r -= 1
-        c += 1
-        break if r < 0
-        break if @seats[r].nil? || @seats[r][c].nil?
-        next unless ['#', 'L'].include?(@seats[r][c])
-        array << @seats[r][c]
-        break
-      end
-      # SE
-      r = row
-      c = col
-      loop do
-        r += 1
-        c += 1
-        break if @seats[r].nil? || @seats[r][c].nil?
-        next unless ['#', 'L'].include?(@seats[r][c])
-        array << @seats[r][c]
-        break
-      end
-      # SW
-      r = row
-      c = col
-      loop do
-        r += 1
-        c -= 1
-        break if c < 0
-        break if @seats[r].nil? || @seats[r][c].nil?
-        next unless ['#', 'L'].include?(@seats[r][c])
-        array << @seats[r][c]
-        break
-      end
-      # NW
-      r = row
-      c = col
-      loop do
-        r -= 1
-        c -= 1
-        break if r < 0 || c < 0
-        break if @seats[r].nil? || @seats[r][c].nil?
-        next unless ['#', 'L'].include?(@seats[r][c])
-        array << @seats[r][c]
-        break
-      end
-      # END
+      array = [seats_north(row, col), seats_south(row, col), seats_east(row, col), seats_west(row, col)]
+      seats_north_east(array, row, col)
+      seats_south_east(array, row, col)
+      seats_south_west(array, row, col)
+      seats_north_west(array, row, col)
       array
+    end
+
+    def seats_north(row, col)
+      (row - 1).downto(0).map { |r| @seats[r][col] }.reject { |x| x.eql?('.') }.first
+    end
+
+    def seats_east(row, col)
+      (col + 1).upto(@seats[row].length - 1).map { |c| @seats[row][c] }.reject { |x| x.eql?('.') }.first
+    end
+
+    def seats_south(row, col)
+      (row + 1).upto(@seats.size - 1).map { |r| @seats[r][col] }.reject { |x| x.eql?('.') }.first
+    end
+
+    def seats_west(row, col)
+      (col - 1).downto(0).map { |c| @seats[row][c] }.reject { |x| x.eql?('.') }.first
+    end
+
+    def seats_north_east(array, row, col)
+      loop do
+        row -= 1
+        col += 1
+        break if illegal_seat?(row, col)
+        next unless ['#', 'L'].include?(@seats[row][col])
+
+        array << @seats[row][col]
+        break
+      end
+    end
+
+    def seats_south_east(array, row, col)
+      loop do
+        row += 1
+        col += 1
+        break if illegal_seat?(row, col)
+        next unless ['#', 'L'].include?(@seats[row][col])
+
+        array << @seats[row][col]
+        break
+      end
+    end
+
+    def seats_south_west(array, row, col)
+      loop do
+        row += 1
+        col -= 1
+        break if illegal_seat?(row, col)
+        next unless ['#', 'L'].include?(@seats[row][col])
+
+        array << @seats[row][col]
+        break
+      end
+    end
+
+    def seats_north_west(array, row, col)
+      loop do
+        row -= 1
+        col -= 1
+        break if illegal_seat?(row, col)
+        next unless ['#', 'L'].include?(@seats[row][col])
+
+        array << @seats[row][col]
+        break
+      end
+    end
+
+    def illegal_seat?(row, col)
+      row.negative? || col.negative? || @seats[row].nil? || @seats[row][col].nil?
     end
 
     def count_occupied_seats
