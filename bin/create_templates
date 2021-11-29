@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'erb'
+require 'fileutils'
+
+project_root        = File.expand_path(File.dirname(File.dirname(__FILE__)))
+templates_directory = File.join(project_root, 'resources', 'templates')
+
+1.upto(25).each do |day|
+  day_number = day.to_s.rjust(2, '0')
+
+  bin_file = File.join(project_root, 'bin', "day_#{day_number}")
+  File.open(bin_file, 'w') do |f|
+    f << ERB.new(File.read(File.join(templates_directory, 'bin_day_N.erb'))).result(binding)
+  end unless File.exist?(bin_file)
+  File.chmod(0755, bin_file)
+
+  lib_file = File.join(project_root, 'lib', 'aoc_2020', "day_#{day_number}.rb")
+  File.open(lib_file, 'w') do |f|
+    f << ERB.new(File.read(File.join(templates_directory, 'lib_day_N.rb.erb'))).result(binding)
+  end unless File.exist?(lib_file)
+
+  input_file = File.join(project_root, 'resources', 'input', "day_#{day_number}.txt")
+  FileUtils.touch(input_file) unless File.exist?(input_file)
+
+  example_input_file = File.join(project_root, 'resources', 'input', "day_#{day_number}_example.txt")
+  FileUtils.touch(example_input_file) unless File.exist?(example_input_file)
+
+  spec_file = File.join(project_root, 'spec', "aoc_2020_day_#{day_number}_spec.rb")
+  File.open(spec_file, 'w') do |f|
+    f << ERB.new(File.read(File.join(templates_directory, 'spec_aoc_2020_day_N_spec.rb.erb'))).result(binding)
+  end unless File.exist?(spec_file)
+end
