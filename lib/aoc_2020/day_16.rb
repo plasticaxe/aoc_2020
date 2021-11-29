@@ -56,24 +56,25 @@ module Aoc2020
 
     def indexed_fields
       @indexed_fields ||= begin
-                            fields         = {}
-                            ticket_values  = {}
-                            rule_set       = all_rules.dup
-                            rule_top_index = rule_set.size - 1
+                            fields    = {}
+                            rule_set  = all_rules.dup
                             loop do
-                              0.upto(rule_top_index).map do |index|
-                                ticket_values[index] ||= valid_nearby_tickets.map { |t| t[index] }
-                                matched = matched_rules(ticket_values[index], rule_set)
+                              0.upto(all_rules.size - 1).map do |index|
+                                next unless fields.keys.index(index).nil?
+                                matched = matched_rules(tickets_at_index(index), rule_set)
                                 if matched.size.eql?(1)
-                                  puts "matched #{matched[0]}"
                                   fields[index] = matched[0]
                                   rule_set.delete(matched[0])
-                                  puts "remaining rules: #{rule_set.keys}"
+                                  puts "matched #{matched[0]}, remaining rules: #{rule_set.keys}"
                                   return fields if rule_set.empty?
                                 end
                               end
                             end
                           end
+    end
+
+    def tickets_at_index(index)
+      (@tickets_at_index ||= {})[index] ||= valid_nearby_tickets.map { |t| t[index] }
     end
 
     def matched_rules(ticket_values, rule_set)
