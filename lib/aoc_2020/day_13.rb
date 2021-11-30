@@ -38,7 +38,7 @@ module Aoc2020
       end
 
       def at_index?(index)
-        (index + @hash[:offset]) % @hash[:id] == 0
+        ((index + @hash[:offset]) % @hash[:id]).zero?
       end
     end
 
@@ -47,34 +47,28 @@ module Aoc2020
       @check_shuttles_ids     = {}
       @check_shuttles_offsets = {}
       @start_at               = start_at
+      @increment              = 1
     end
 
     def shuttles
       @shuttles ||= begin
-                      shuttles = []
-                      offset   = 0
-                      @shuttle_ids.each do |shuttle_id|
-                        # shuttles << Shuttle.new(shuttle_id, offset).freeze unless shuttle_id.eql?('x')
-                        shuttles << { id: shuttle_id.to_i, offset: offset }.freeze unless shuttle_id.eql?('x')
-                        offset += 1
-                      end
-                      puts "shuttles = #{shuttles}"
-                      shuttles
-                    end.freeze
+        shuttles = []
+        offset = 0
+        @shuttle_ids.each do |shuttle_id|
+          shuttles << { id: shuttle_id.to_i, offset: offset }.freeze unless shuttle_id.eql?('x')
+          offset += 1
+        end
+        puts "shuttles = #{shuttles}"
+        shuttles
+      end.freeze
     end
 
     def synced_shuttles
-      # first_shuttle_id = shuttles.first.id
       first_shuttle_id = shuttles.first[:id].dup.freeze
       index            = @start_at - (@start_at % first_shuttle_id)
       puts "starting at #{index}"
       loop do
-        # index += 15390703
-        # index += 200079139
-        index += 98639015527
-        # Test answer
-        # exit if index > 1_068_781
-        # puts index if index % 100_000 == 0
+        index += @increment
         break if check_shuttles(index.dup.freeze)
       end
       index
@@ -82,74 +76,73 @@ module Aoc2020
 
     def check_shuttles(index)
       shuttles.each_index do |this_index|
-        next unless this_index > 0
-        prev_index = (this_index - 1).freeze
-        # @check_shuttles_ids[this_index] ||= shuttles[this_index].id.freeze
-        # @check_shuttles_ids[prev_index] ||= shuttles[prev_index].id.freeze
-        # @check_shuttles_offsets[this_index] ||= shuttles[this_index].offset.freeze
-        # @check_shuttles_offsets[prev_index] ||= shuttles[prev_index].offset.freeze
-        @check_shuttles_ids[this_index] ||= shuttles[this_index][:id].dup.freeze
-        @check_shuttles_ids[prev_index] ||= shuttles[prev_index][:id].dup.freeze
+        next unless this_index.positive?
+
+        prev_index = (this_index - 1)
+        @check_shuttles_ids[this_index]     ||= shuttles[this_index][:id].dup.freeze
+        @check_shuttles_ids[prev_index]     ||= shuttles[prev_index][:id].dup.freeze
         @check_shuttles_offsets[this_index] ||= shuttles[this_index][:offset].dup.freeze
         @check_shuttles_offsets[prev_index] ||= shuttles[prev_index][:offset].dup.freeze
         return false unless arrow_alignment(@check_shuttles_ids[prev_index],
                                             @check_shuttles_ids[this_index],
                                             (index.dup.freeze + @check_shuttles_offsets[prev_index]).freeze,
-                                            (@check_shuttles_offsets[this_index] - @check_shuttles_offsets[prev_index]).freeze) == 0
-        puts "#{index.dup} :: Alligned shuttles #{prev_index} and #{this_index}" if this_index > 6
+                                            (@check_shuttles_offsets[this_index] - @check_shuttles_offsets[prev_index]).freeze).zero?
+
+        update_increment(this_index, index.dup)
       end
       true
     end
 
-    # def synced_shuttles
-    #   current        = shuttles[0].id.to_i
-    #   current_offset = 0
-    #   puts "current = #{current}"
-    #   shuttles[1..].each do |shuttle|
-    #     puts "shuttle.id.to_i = #{shuttle.id.to_i}"
-    #     current        = arrow_alignment(shuttle.id.to_i, current, shuttle.offset.to_i - current_offset)
-    #     current_offset = shuttle.offset.to_i
-    #     puts "current = #{current}", "current_offset = #{current_offset}"
-    #   end
-    #   current
-    # end
-    #
+    def update_increment(shuttle_number, index)
+      @increment_tracker ||= {}
+      incremement_store = @increment_tracker[shuttle_number] ||= []
+      incremement_store.push(index)
+      top_shuttle = @increment_tracker.keys.max
+      if @increment_tracker[top_shuttle].size > 1
+        new_increment = @increment_tracker[top_shuttle][-1] - @increment_tracker[top_shuttle][-2]
+        if @increment != new_increment
+          @increment = new_increment
+          puts "@increment = #{@increment}"
+        end
+      end
+    end
 
     # https://math.stackexchange.com/questions/2218763/how-to-find-lcm-of-two-numbers-when-one-starts-with-an-offset
 
     def arrow_alignment(red_len, green_len, index, advantage)
       period, phase = combine_phased_rotations(red_len, index, green_len, -(index + advantage) % green_len)
-      # puts "-phase % period = #{-phase % period}"
       (@arrow_alignment ||= {})["#{period}e#{phase}".to_sym] ||= (-phase % period).freeze
     end
 
     def combine_phased_rotations(a_period, a_phase, b_period, b_phase)
       gcd, s, _t = extended_gcd(a_period, b_period)
       (@combine_phased_rotations ||= {})["#{gcd}e#{s}e#{a_phase}e#{b_phase}".to_sym] ||= begin
-        # puts "--- #{gcd}e#{s}e#{a_phase}e#{b_phase}"
-        phase_difference      = a_phase - b_phase
+        phase_difference = a_phase - b_phase
         pd_mult, pd_remainder = phase_difference.divmod(gcd)
-        raise if pd_remainder > 0
+        raise if pd_remainder.positive?
+
         combined_period = (a_period / gcd * b_period).floor
         combined_phase  = (a_phase - s * pd_mult * a_period) % combined_period
-        # puts "combined_period = #{combined_period}, combined_phase = #{combined_phase}"
         [combined_period, combined_phase]
       end.freeze
     end
 
     def extended_gcd(a, b)
       (@extended_gcd ||= {})["#{a}e#{b}".to_s] ||= begin
-       # puts "Getting extended_gcd(#{a}, #{b})"
-       old_r, r = a, b
-       old_s, s = 1, 0
-       old_t, t = 0, 1
-       until r.eql?(0)
-         quotient, remainder = old_r.divmod(r)
-         old_r, r            = r, remainder
-         old_s, s            = s, old_s - quotient * s
-         old_t, t            = t, old_t - quotient * t
-       end
-       [old_r, old_s, old_t]
+        old_r = a
+        r     = b
+        old_s = 1
+        s     = 0
+        old_t = 0
+        t     = 1
+        until r.eql?(0)
+          quotient, remainder = old_r.divmod(r)
+          old_r               = r
+          r                   = remainder
+          old_s, s            = s, old_s - quotient * s
+          old_t, t            = t, old_t - quotient * t
+        end
+        [old_r, old_s, old_t]
       end.freeze
     end
   end
@@ -166,10 +159,7 @@ module Aoc2020
     end
 
     def self.part_two(input_file = default_input_file)
-      # Aoc2020::ShuttleSearch2.new(input_file, 10_000).synced_shuttles
-      # Aoc2020::ShuttleSearch2.new(input_file, 100_000_000_000_000).synced_shuttles
-      Aoc2020::ShuttleSearch2.new(input_file, 147061671838595).synced_shuttles
-      # Aoc2020::ShuttleSearch2.new(input_file, 100_000_000_000_000).test
+      Aoc2020::ShuttleSearch2.new(input_file, 100_000_000_000_000).synced_shuttles
     end
   end
 end

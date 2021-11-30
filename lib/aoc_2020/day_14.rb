@@ -18,12 +18,13 @@ module Aoc2020
 
     def init_docking_program
       @input.each do |i|
-        if i.match(/^mask/)
+        case i
+        when /^mask/
           update_mask(i.split.last)
-        elsif i.match(/^mem/)
+        when /^mem/
           update_mem(i.split.first.gsub(/^mem\[([0-9]+)\]/, '\1'), i.split.last)
         else
-          raise "wut?"
+          raise 'wut?'
         end
       end
     end
@@ -70,9 +71,10 @@ module Aoc2020
 
     def init_docking_program
       @input.each do |i|
-        if i.match(/^mask/)
+        case i
+        when /^mask/
           update_mask(i.split.last)
-        elsif i.match(/^mem/)
+        when /^mem/
           update_mem(i.split.first.gsub(/^mem\[([0-9]+)\]/, '\1'), i.split.last)
         else
           raise 'wut?'

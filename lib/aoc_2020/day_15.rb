@@ -24,11 +24,11 @@ module Aoc2020
       loop do
         @turn += 1
         # puts "@turn = #{@turn}, @record[#{@last_spoken}] = #{@record[@last_spoken]}"
-        if @record[@last_spoken].to_a.size < 2
-          @last_spoken = 0
-        else
-          @last_spoken = @record[@last_spoken][-1] - @record[@last_spoken][-2]
-        end
+        @last_spoken = if @record[@last_spoken].to_a.size < 2
+                         0
+                       else
+                         @record[@last_spoken][-1] - @record[@last_spoken][-2]
+                       end
         (@record[@last_spoken] ||= []).push(@turn)
         return @last_spoken if @turn == end_turn
       end

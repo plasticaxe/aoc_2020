@@ -6,7 +6,7 @@ module Aoc2020
   #----
   class RainRisk1
     def initialize(input_file)
-      @input       = File.read(input_file).each_line(chomp: true).map { |line| { action: line[0], value: line[1..-1].to_i } }
+      @input       = File.read(input_file).each_line(chomp: true).map { |line| { action: line[0], value: line[1..].to_i } }
       @south_north = 0
       @west_east   = 0
       @direction   = 'E'
@@ -58,7 +58,7 @@ module Aoc2020
   #----
   class RainRisk2
     def initialize(input_file)
-      @input       = File.read(input_file).each_line(chomp: true).map { |line| { action: line[0], value: line[1..-1].to_i } }
+      @input       = File.read(input_file).each_line(chomp: true).map { |line| { action: line[0], value: line[1..].to_i } }
       @boat_sn     = 0
       @boat_we     = 0
       @waypoint_sn = 1
