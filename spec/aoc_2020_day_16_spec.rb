@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#RSpec.describe Aoc2020 do
+# RSpec.describe Aoc2020 do
 #  describe 'day_16' do
 #    context 'part_one_example' do
 #      it 'should have the right answer' do
@@ -26,4 +26,4 @@
 #      end
 #    end
 #  end
-#end
+# end
